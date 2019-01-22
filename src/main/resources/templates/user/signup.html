@@ -1,0 +1,188 @@
+﻿<#import "/spring.ftl" as spring/>
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Signup</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+    	.loader{
+    		z-index:1;
+    		position:absolute;
+    		top:30%;
+    		left: calc(50% - 25px);
+    		border: 10px solid #f3f3f3;
+    		border-top-color: #3498db;
+    		border-radius: 50%;
+    		width:50px;
+    		height:50px;
+    		animation: spin 2s linear infinite;
+    	}
+    	
+    	@keyframes spin{
+    		0%{transfrom: rotate(0deg)}
+    		100%{transform: rotate(360deg)}
+    	}
+    </style>
+  </head>
+  <body>
+  	<div id="loader"></div>
+    <#include "/include/menu.html"/>
+    <div class="container">
+    	<div class="row">
+    		<form action="/user/signup" method="post"
+    			  class="form form-horizontal">
+    			  <@spring.bind "user.id"/>
+    			  <div class="form-group">
+    			  	<label class="control-label col-xs-2">ID</label>
+    			  	<div class="col-xs-8">
+    			  		<input type="text"
+    			  			   class="form-control"
+    			  			   id="${spring.status.expression}"
+    			  			   name="${spring.status.expression}"
+    			  			   value="${spring.status.value?default('')}"/>
+    			  		<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+    			  	</div>
+    			  	<div class="col-xs-2">
+    			  		<button class="btn btn-default btn-block" 
+    			  				type="button" onclick="dupcheck();">중복확인</button>
+    			  	</div>
+    			  </div>
+    			  <@spring.bind "user.password"/>
+    			  <div class="form-group">
+    			  	<label class="control-label col-xs-2">Password</label>
+    			  	<div class="col-xs-5">
+    			  		<input type="password"
+    			  			   class="form-control"
+    			  			   name="${spring.status.expression}"
+    			  			   value="${spring.status.value?default('')}"/>
+    			  		<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+    			  	</div>
+    			  	<@spring.bind "user.passwordConfirm"/>
+    			  	<div class="col-xs-5">
+    			  		<input type="password"
+    			  			   class="form-control"
+    			  			   name="${spring.status.expression}"
+    			  			   value="${spring.status.value?default('')}"
+    			  			   placeholder="password confirm"/>
+    			  		<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+    			  	</div>
+    			  </div>
+    			  <@spring.bind "user.name"/>
+   			  	  <div class="form-group">
+   			  		<label class="control-label col-xs-2">Name</label>
+    			  	<div class="col-xs-10">
+    			  		<input type="text"
+    			  			   class="form-control"
+    			  			   name="${spring.status.expression}"
+    			  			   value="${spring.status.value?default('')}"/>
+    			  		<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+    			  	</div>
+   			  	  </div>
+   			  	  <@spring.bind "user.email"/>
+   			  	  <div class="form-group">
+   			  		<label class="control-label col-xs-2">Email</label>
+    			  	<div class="col-xs-5">
+    			  		<input type="email"
+    			  			   class="form-control"
+    			  			   name="${spring.status.expression}"
+    			  			   value="${spring.status.value?default('')}"/>
+    			  		<span id="email-error" class="error">${spring.status.errorMessages[0]?default('')}</span>
+    			  	</div>
+    			  	<div class="col-xs-3">
+    			  		<button type="button"
+    			  		        class="btn btn-default btn-block"
+ 			  		      onclick="emailCertify(this);">인증메일 발송</button>
+    			  	</div>
+    			  	<@spring.bind "user.emailCode"/>
+    			  	<div class="col-xs-2">
+    			  		<input type="text"
+    			  			   class="form-control"
+    			  			   name="${spring.status.expression}"
+    			  			   value="${spring.status.value?default('')}"
+    			  			   placeholder="인증코드입력란"/>
+    			  		<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+    			  	</div>
+   			  	  </div>
+   			  	  <@spring.bind "user.gender"/>
+   			  	  <div class="form-group">
+   			  	  	<label class="control-label col-xs-2">Gender</label>
+   			  	  	<div class="col-xs-10">
+   			  	  		<div class="radio">
+	   			  	  		<label class="radio-inline">
+	   			  	  			<input type="radio" 
+	   			  	  				   name="${spring.status.expression}"
+	   			  	  				   value="m"
+	   			  	  				   <#if user.gender?default('') == "m">checked</#if>/>
+	   			  	  			Male
+	   			  	  		</label>
+	   			  	  		<label class="radio-inline">
+	   			  	  			<input type="radio" 
+	   			  	  				   name="${spring.status.expression}"
+	   			  	  				   value="f" 
+	   			  	  				   <#if user.gender?default('') == "f">checked</#if>/>
+	   			  	  			Female
+	   			  	  		</label>
+   			  	  		</div>
+   			  	  		<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+   			  	  	</div>
+   			  	  </div>
+   			  	  <div class="form-group">
+   			  	  	<div class="col-xs-10 col-xs-offset-2">
+   			  	  		<button type="submit" 
+   			  	  				class="btn btn-default btn-block">가입완료</button>
+   			  	  	</div>
+   			  	  </div>
+    		</form>
+    	</div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script>
+    	function dupcheck(){
+    		$.ajax({
+				url:"/user/dupcheck",
+				type:"post",
+				data:{id:$("#id").val()},
+				success:function(data){
+					if(data == 'exist'){
+						alert("존재하는 아이디입니다");
+					}else{
+						alert("사용 가능한 아이디입니다");
+					}
+				}
+    		});
+    	}
+    	
+    	function emailCertify(btn){
+    		$(btn).attr("disabled","disabled");
+    		$("#loader").addClass("loader");
+    		$.ajax({
+				url:"/user/emailcertify",
+				type:"post",
+				data:{email:$("[name=email]").val()},
+				success:function(data){
+					if(data == "null"){
+						$("#email-error").text("이메일을 입력해 주세요");
+					}else if(data == "duplicated"){
+						$("#email-error").text(
+								"이미 가입되어있는 이메일 주소입니다");
+					}else if(data == "error"){
+						$("#email-error").text(
+								"이메일 형식이 올바르지 않습니다");
+					}else{
+						$("#loader").removeClass("loader");
+						$(btn).removeAttr("disabled");
+					}
+					
+				}
+    		});
+    	}
+    </script>
+  </body>
+</html>
+
+
+
+

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="diary">
+	<select id="list" parameterType="String"
+			resultMap="tagMap">
+			select * from diary where users_id = #{value} 
+			order by id desc
+	</select>
+	
+	<resultMap type="Diary" id="tagMap">
+		<result property="id" column="id"/>
+		<collection property="tags" ofType="Tag"
+					column="id" select="tag.list"></collection>
+	</resultMap>
+	
+	<insert id="add" parameterType="Diary">
+		insert into diary 
+		values(seq_diary_id.nextval, #{users_id}, 
+			   #{title}, #{content}, sysdate)
+		<selectKey resultType="int" keyProperty="id"
+				   order="AFTER">
+			select seq_diary_id.currval from dual
+		</selectKey>
+	</insert>
+</mapper>
+
+
+

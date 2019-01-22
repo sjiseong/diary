@@ -1,0 +1,63 @@
+<#import "/spring.ftl" as spring/>
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <body>
+  	<#include "/include/menu.html"/>
+	<div class="container">
+		<div class="row">
+			<h1 class="text-center"
+				style="padding:50px 0">Sign in to Diary</h1>
+		</div>
+		<div class="row">
+			<div class="col-sm-6 col-sm-offset-3">
+				<form action="/user/signin" 
+					  class="form form-horizontal"
+					  method="post">
+					<@spring.bind "user.id"/>
+					<div class="form-group">
+						<label for="" class="control-label col-xs-2">ID</label>
+						<div class="col-xs-10">
+							<input type="text"
+								   name="${spring.status.expression}"
+								   class="form-control"
+								   value="${spring.status.value?default('')}"/>
+							<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+						</div>
+					</div>
+					<@spring.bind "user.password"/>
+					<div class="form-group">
+						<label for="" class="control-label col-xs-2">PWD</label>
+						<div class="col-xs-10">
+							<input type="password"
+								   name="${spring.status.expression}"
+								   class="form-control"
+								   value="${spring.status.value?default('')}"/>
+							<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-5 col-xs-offset-2"
+							 style="padding-right:7px">
+							<button type="submit"
+						            class="btn btn-default btn-block">로그인</button>
+						</div>
+						<div class="col-xs-5"
+							 style="padding-left:7px">
+							<a href="/user/signin" 
+							   class="btn btn-default btn-block">회원가입</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>    
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

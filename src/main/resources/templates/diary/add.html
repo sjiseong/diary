@@ -1,0 +1,115 @@
+<#import "/spring.ftl" as spring/>
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.css" rel="stylesheet">
+  </head>
+  <body>
+    <#include "/include/menu.html">
+    <div class="container">
+    	<div class="row">
+    		<div class="col-sm-8 col-sm-offset-2">
+    			<form action="/diary/add" method="post"
+    				  class="form form-horizontal">
+    				<@spring.bind "diary.title"/>
+    				<div class="form-group">
+    					<label class="control-label col-xs-2">Title</label>
+    					<div class="col-xs-10">
+    						<input type="text" 
+    							   name="${spring.status.expression}"
+    							   class="form-control"
+    							   value="${spring.status.value?default('')}" />
+    						<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+    					</div>
+    				</div>
+    				<div class="form-group">
+    					<label class="control-label col-xs-2">Tagging</label>
+    					<div class="col-xs-10">
+    						<div class="row">
+    							<div class="col-sm-4">
+    								<input type="text" 
+    									   id="tag-name"
+    									   class="form-control" />
+    							</div>
+    							<div class="col-sm-4">
+    								<select id="tag-color" class="form-control">
+    									<option value="default">회색</option>
+    									<option value="danger">빨강</option>
+    									<option value="primary">파랑</option>
+    									<option value="success">초록</option>
+    									<option value="warning">노랑</option>
+    								</select>
+    							</div>
+    							<div class="col-sm-4">
+    								<button type="button"
+    									    class="btn btn-default btn-block"
+    									    onclick="addTag();">추가</button>
+    							</div>
+    							<div id="tags" class="col-sm-12">
+    								
+    							</div>
+    						</div>
+    					</div>
+    				</div>
+    				<@spring.bind "diary.content"/>
+    				<div class="form-group">
+    					<label class="control-label col-xs-2">Content</label>
+    					<div class="col-xs-10">
+    						<textarea name="${spring.status.expression}"
+    								  id="content"
+    								  class="form-control">${spring.status.value?default('')}</textarea>
+    						<span class="error">${spring.status.errorMessages[0]?default('')}</span>
+    					</div>
+    				</div>
+    				<div class="form-group">
+    					<div class="col-xs-10 col-xs-offset-2">
+    						<button type="submit"
+    								class="btn btn-default btn-block">추가</button>
+    					</div>
+    				</div>
+    			</form>
+    		</div>
+    	</div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/summernote.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.9/lang/summernote-ko-KR.min.js"></script>
+    <script>
+	    $("#content").summernote({
+			height:400,
+			//focus: true,
+			disableResizeEditor:true,
+			lang: 'ko-KR'
+		});
+    	var idx = 0;
+    	function addTag(){
+    		var $tag = $("<span>")
+    				    .addClass("label")
+    				    .addClass("label-"+$("#tag-color").val())
+    				    .text($("#tag-name").val());
+    		$("#tags").append($tag);
+    		$("#tags").html($("#tags").html()+"&nbsp;");
+    		
+    		$("#tags").append(
+    			"<input type='hidden' name='tags["+idx+"].name' value='"+$("#tag-name").val()+"'/>");		
+    		$("#tags").append(
+    			"<input type='hidden' name='tags["+idx+"].color' value='"+$("#tag-color").val()+"'/>");		
+    		idx++;
+    		$("#tag-name").val('');
+    	}
+    </script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
